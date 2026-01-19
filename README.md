@@ -49,5 +49,5 @@
 - 方案一：解压 vsNV 补丁包自播放器根目录，已内置 Python 运行环境和 VapourSynth 及其必要插件。
 - 方案二：
   1. 自行安装 [Python](https://www.python.org) 和 [VapourSynth](https://github.com/vapoursynth/vapoursynth)。
-  2. pip 安装 k7sfunc 库。
+  2. pip 安装 [k7sfunc](https://pypi.org/project/k7sfunc/) 。`pip install k7sfunc`
   3. 将 vsNV 补丁包里 vs-plugins 中的所有文件解压自 VapourSynth 安装目录下的 plugins 文件夹中。
