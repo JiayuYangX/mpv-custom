@@ -1,6 +1,8 @@
 # mpv-custom
 
-项目为 [mpv](https://mpv.io/) 播放器的个人配置文件，采用 [ModernZ](https://github.com/Samillion/ModernZ) 作为 OSC，脚本和设置参考自 [mpv-config](https://github.com/dyphire/mpv-config)，滤镜和着色器来源于 [mpv_PlayKit（原 mpv-lazy）](https://github.com/hooke007/mpv_PlayKit)。![示意图](scheme.png)
+项目为 [mpv](https://mpv.io/) 播放器的个人配置文件，采用 [ModernZ](https://github.com/Samillion/ModernZ) 作为 OSC，脚本和设置参考自 [mpv-config](https://github.com/dyphire/mpv-config)，滤镜和着色器来源于 [mpv_PlayKit（原 mpv-lazy）](https://github.com/hooke007/mpv_PlayKit)。
+
+![示意图](scheme.png)
 
 ## 使用方法
 
