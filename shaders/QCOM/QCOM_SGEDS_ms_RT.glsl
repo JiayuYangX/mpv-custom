@@ -88,6 +88,7 @@ vec2 edgeDirection(vec4 left, vec4 right) {
 vec4 hook() {
 
 	vec4 color = HOOKED_texOff(vec2(0.0));
+	float orig_alpha = color.a;
 
 	vec2 imgCoord = (HOOKED_pos * PREKERNEL_size) + vec2(-0.5, 0.5);
 	vec2 imgCoordPixel = floor(imgCoord);
@@ -127,11 +128,11 @@ vec4 hook() {
 		neighbors[6] = PREKERNEL_texOff(vec2(-1.0,  1.0));
 		neighbors[7] = PREKERNEL_texOff(vec2( 0.0,  1.0));
 		neighbors[8] = PREKERNEL_texOff(vec2( 1.0,  1.0));
-		
+
 		float avg = 0.0;
 		for(int i = 0; i < 9; i++) avg += neighbors[i].g;
 		avg /= 9.0;
-		
+
 		float variance = 0.0;
 		for(int i = 0; i < 9; i++) {
 			float diff = neighbors[i].g - avg;
@@ -162,7 +163,9 @@ vec4 hook() {
 		upDown = upDown - vec4(mean);
 		color.w = color.g - mean;
 
-		float sum = (((((abs(left.x)+abs(left.y))+abs(left.z))+abs(left.w))+(((abs(right.x)+abs(right.y))+abs(right.z))+abs(right.w)))+(((abs(upDown.x)+abs(upDown.y))+abs(upDown.z))+abs(upDown.w)));
+		float sum = (((((abs(left.x)+abs(left.y))+abs(left.z))+abs(left.w))+
+			          (((abs(right.x)+abs(right.y))+abs(right.z))+abs(right.w)))+
+			          (((abs(upDown.x)+abs(upDown.y))+abs(upDown.z))+abs(upDown.w)));
 		float sumMean = 1.014185e+01 / sum;
 		float std = (sumMean*sumMean);
 
@@ -205,7 +208,7 @@ vec4 hook() {
 		color.b = clamp((color.b+deltaY), 0.0, 1.0);
 	}
 
-	color.a = 1.0;
+	color.a = orig_alpha;
 	return color;
 
 }
