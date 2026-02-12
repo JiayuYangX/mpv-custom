@@ -32,7 +32,9 @@
 - [mpv-file-browser](https://github.com/CogentRedTester/mpv-file-browser)：提供 OSC 界面文件浏览功能
 - [clipshot](https://github.com/ObserverOfTime/mpv-scripts/blob/master/clipshot.lua)：将截图复制到剪贴板
 - [osd-bar](https://github.com/422658476/MPV-EASY-Player/blob/master/portable-data/scripts/osd-bar.lua)：窗口模式在底部始终显示进度条（非 OSC）
-- [sub-fastwhisper](https://github.com/dyphire/mpv-config/blob/master/script-opts/sub_fastwhisper.conf)：AI 识别/翻译字幕；来自 [mpv-config](https://github.com/dyphire/mpv-config)，须自行填写 Whisper 程序路径和大模型 API Key
+- [sub-fastwhisper](https://github.com/dyphire/mpv-sub-fastwhisper)：AI 识别/翻译字幕（须自行安装 Faster-Whisper 并填写程序路径和大模型 API Key）
+- [sub-assrt](https://github.com/dyphire/mpv-sub-assrt)：从射手网搜索和下载字幕（由于未使用 uosc，功能可能受限）
+- [uosc_danmaku](https://github.com/Tony15246/uosc_danmaku)：加载弹弹play弹幕（由于未使用 uosc，功能可能受限）
 - [select.lua](https://github.com/mpv-player/mpv/blob/master/player/lua/select.lua)：汉化版本的菜单；修改自 mpv 源代码内置脚本
 - [stats.lua](https://github.com/FinnRaze/mpv-stats-zh)：汉化版本的统计信息；修改以对增加内容进行汉化
 
@@ -44,7 +46,7 @@
 
 ## VapourSynth 滤镜（自行安装）
 
-须配合 [mpv_PlayKit](https://github.com/hooke007/mpv_PlayKit) 的 vsNV 补丁包使用（下载链接：<https://github.com/hooke007/mpv_PlayKit/releases>）。解压后滤镜文件将位于 portable_config\vs\ 中。
+须配合 [mpv_PlayKit](https://github.com/hooke007/mpv_PlayKit) 的 vsNV 补丁包使用（下载链接：<https://github.com/hooke007/mpv_PlayKit/releases>）。滤镜文件位于 portable_config\vs\。
 
 ### 使用方法：
 
