@@ -1310,7 +1310,7 @@ local function add_track(c, t, i)
     local track_rg = t["replaygain-track-peak"] ~= nil or t["replaygain-track-gain"] ~= nil
     local album_rg = t["replaygain-album-peak"] ~= nil or t["replaygain-album-gain"] ~= nil
     if track_rg or album_rg then
-        append(c, "", {prefix="音量均衡:"})
+        append(c, "", {prefix="播放增益:"})
     end
     if track_rg then
         append(c, "", {prefix="曲目:", indent=o.indent .. o.prefix_sep, prefix_sep=""})
