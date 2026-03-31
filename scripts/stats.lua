@@ -695,9 +695,9 @@ local function add_file(s, print_cache, print_tags)
                 elseif tag == "Album_Artist" then
                     tag = "专辑艺术家"
                 elseif tag == "Composer" then
-                    tag = "作曲家"
+                    tag = "作曲"
                 elseif tag == "Date" then
-                    tag = "日期"
+                    tag = "年份"
                 elseif tag == "Genre" then
                     tag = "流派"
                 elseif tag == "Track" then
