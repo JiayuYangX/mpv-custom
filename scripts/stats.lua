@@ -35,6 +35,7 @@ local o = {
     file_tag_max_count = 16,         -- only show the first x file tags
     show_frame_info = false,         -- whether to show the current frame info
     term_clip = true,
+    track_info_selected_only = true, -- only show selected track info
     debug = false,
 
     -- Graph options and style
@@ -680,6 +681,7 @@ local function add_file(s, print_cache, print_tags)
     end
 
     if print_tags then
+        append_property(s, "duration", {prefix="时长:"})
         local tags = mp.get_property_native("display-tags")
         local tags_displayed = 0
         for _, tag in ipairs(tags) do
@@ -692,12 +694,18 @@ local function add_file(s, print_cache, print_tags)
                     tag = "专辑"
                 elseif tag == "Album_Artist" then
                     tag = "专辑艺术家"
+                elseif tag == "Composer" then
+                    tag = "作曲家"
                 elseif tag == "Date" then
                     tag = "日期"
                 elseif tag == "Genre" then
                     tag = "流派"
                 elseif tag == "Track" then
-                    tag = "曲目"
+                    tag = "音轨号"
+                elseif tag == "Comment" then
+                    tag = "注释"
+                elseif tag == "Description" then
+                    tag = "描述"
                 end
                 append(s, value, {prefix=string.gsub(tag, "_", " ") .. ":"})
                 tags_displayed = tags_displayed + 1
@@ -1302,6 +1310,7 @@ local function add_track(c, t, i)
     if not t["image"] and t["demux-fps"] then
         append_fps(c, "track-list/" .. i .. "/demux-fps", "")
     end
+    append(c, t["format-name"], {prefix="数据格式:"})
     append(c, t["demux-rotation"], {prefix="旋转:"})
     if t["demux-par"] then
         local num, den = float2rational(t["demux-par"])
@@ -1314,14 +1323,14 @@ local function add_track(c, t, i)
     end
     if track_rg then
         append(c, "", {prefix="曲目:", indent=o.indent .. o.prefix_sep, prefix_sep=""})
-        append(c, t["replaygain-track-gain"], {prefix="增益值:", suffix=" dB",
+        append(c, t["replaygain-track-gain"], {prefix="增益:", suffix=" dB",
                                                nl="", indent=o.prefix_sep})
         append(c, t["replaygain-track-peak"], {prefix="峰值:", suffix=" dB",
                                                nl="", indent=o.prefix_sep})
     end
     if album_rg then
         append(c, "", {prefix="专辑:", indent=o.indent .. o.prefix_sep, prefix_sep=""})
-        append(c, t["replaygain-album-gain"], {prefix="增益值:", suffix=" dB",
+        append(c, t["replaygain-album-gain"], {prefix="增益:", suffix=" dB",
                                                nl="", indent=o.prefix_sep})
         append(c, t["replaygain-album-peak"], {prefix="峰值:", suffix=" dB",
                                                nl="", indent=o.prefix_sep})
@@ -1345,7 +1354,7 @@ local function track_info()
     table.insert(c, o.nl .. o.nl)
     add_file(c, false, true)
     for i, track in ipairs(mp.get_property_native("track-list")) do
-        if track['selected'] then
+        if track['selected'] or not o.track_info_selected_only then
             add_track(c, track, i - 1)
         end
     end
@@ -1599,6 +1608,9 @@ local function unbind_scroll()
     end
 end
 
+local add_page_bindings
+local remove_page_bindings
+
 local function filter_bindings()
     input.get({
         prompt = "Filter bindings:",
@@ -1606,6 +1618,10 @@ local function filter_bindings()
             -- This is necessary to close the console if the oneshot
             -- display_timer expires without typing anything.
             searched_text = ""
+
+            -- Must be re-bound to override the console.lua bindings.
+            remove_page_bindings()
+            bind_scroll()
         end,
         edited = function (text)
             reset_scroll_offsets()
@@ -1619,6 +1635,7 @@ local function filter_bindings()
         closed = function ()
             searched_text = nil
             if display_timer:is_enabled() then
+                add_page_bindings()
                 print_page(curr_page)
                 if display_timer.oneshot then
                     display_timer:kill()
@@ -1626,7 +1643,6 @@ local function filter_bindings()
                 end
             end
         end,
-        dont_bind_up_down = true,
     })
 end
 
@@ -1668,7 +1684,7 @@ local function update_scroll_bindings(k)
 end
 
 -- Add keybindings for every page
-local function add_page_bindings()
+add_page_bindings = function()
     local function a(k)
         return function()
             reset_scroll_offsets()
@@ -1687,7 +1703,7 @@ end
 
 
 -- Remove keybindings for every page
-local function remove_page_bindings()
+remove_page_bindings = function()
     for k, _ in pairs(pages) do
         mp.remove_key_binding("__forced_"..k)
     end
