@@ -701,6 +701,7 @@ local function fastwhisper_cmd(file_path, sub_path)
         "--max_line_width", o.max_line_width,
         "--threads", o.threads,
         "--output_dir", sub_path,
+        "--ff_track", tostring(mp.get_property_number("current-tracks/audio/id", 0)),
     }
 
     if o.language ~= "" then

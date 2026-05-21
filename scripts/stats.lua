@@ -984,9 +984,9 @@ local function append_img_params(s, r, ro)
 
     local pixel_format = r["hw-pixelformat"] or r["pixelformat"]
     append(s, pixel_format, {prefix="像素格式:"})
-    append(s, r["colorlevels"], {prefix="动态范围:", nl="", indent=indent})
+    append(s, r["colorlevels"], {prefix="色彩范围:", nl="", indent=indent})
     if r["chroma-location"] and r["chroma-location"] ~= "unknown" then
-        append(s, r["chroma-location"], {prefix="色度采样:", nl="", indent=indent})
+        append(s, r["chroma-location"], {prefix="色度位置:", nl="", indent=indent})
     end
 
     -- Group these together to save vertical space
@@ -1004,9 +1004,9 @@ local function append_img_params(s, r, ro)
         append(s, r["primaries"], {prefix="in", nl="", indent=" ", prefix_sep=" ",
                                    no_prefix_markup=true})
     else
-        append(s, r["primaries"], {prefix="色彩原色:", nl="", indent=indent})
+        append(s, r["primaries"], {prefix="原色:", nl="", indent=indent})
     end
-    append(s, r["gamma"], {prefix="传输特性:", nl="", indent=indent})
+    append(s, r["gamma"], {prefix="传递函数:", nl="", indent=indent})
 end
 
 
@@ -1050,7 +1050,7 @@ local function add_video_out(s)
     append_property(s, "avsync", {prefix="A/V同步偏移:"})
     append_fps(s, "display-fps", "estimated-display-fps")
     if append_property(s, "decoder-frame-drop-count",
-                       {prefix="丢帧暂计:", suffix=" (解码)"}) then
+                       {prefix="丢帧数:", suffix=" (解码)"}) then
         append_property(s, "frame-drop-count", {suffix=" (输出)", nl="", indent=""})
     end
     append_display_sync(s)
@@ -1100,7 +1100,7 @@ local function add_video(s)
     end
 
     local track = mp.get_property_native("current-tracks/video")
-    local track_type = (track and track.image) and "图片:" or "视频轨:"
+    local track_type = (track and track.image) and "图片:" or "视频:"
     append(s, "", {prefix=track_type, nl=o.nl .. o.nl, indent=""})
     if track and append(s, track["codec-desc"], {prefix_sep="", nl="", indent=""}) then
         append(s, track["codec-profile"], {prefix="[", nl="", indent=" ", prefix_sep="",
@@ -1175,7 +1175,7 @@ local function add_audio(s)
         return (a == b or a == nil) and a or (a .. " ➜ " .. b)
     end
 
-    append(s, "", {prefix="音频轨:", nl=o.nl .. o.nl, indent=""})
+    append(s, "", {prefix="音频:", nl=o.nl .. o.nl, indent=""})
     local track = mp.get_property_native("current-tracks/audio")
     if track then
         append(s, track["codec-desc"], {prefix_sep="", nl="", indent=""})
@@ -1340,9 +1340,9 @@ local function add_track(c, t, i)
 
     local type = t.image and "图片" or t["type"]:sub(1, 1):upper() .. t["type"]:sub(2)
     if type == "Video" then
-        type = "视频轨"
+        type = "视频"
     elseif type == "Audio" then
-        type = "音频轨"
+        type = "音频"
     elseif type == "Sub" then
         type = "字幕"
     end
@@ -1403,16 +1403,16 @@ local function add_track(c, t, i)
     end
     if track_rg then
         append(c, "", {prefix="音轨:", indent=o.indent .. o.prefix_sep, prefix_sep=""})
-        append(c, t["replaygain-track-gain"], {prefix="Gain:", suffix=" dB",
+        append(c, t["replaygain-track-gain"], {prefix="增益:", suffix=" dB",
                                                nl="", indent=o.prefix_sep})
-        append(c, t["replaygain-track-peak"], {prefix="Peak:", suffix=" dB",
+        append(c, t["replaygain-track-peak"], {prefix="峰值:", suffix=" dB",
                                                nl="", indent=o.prefix_sep})
     end
     if album_rg then
         append(c, "", {prefix="专辑:", indent=o.indent .. o.prefix_sep, prefix_sep=""})
-        append(c, t["replaygain-album-gain"], {prefix="Gain:", suffix=" dB",
+        append(c, t["replaygain-album-gain"], {prefix="增益:", suffix=" dB",
                                                nl="", indent=o.prefix_sep})
-        append(c, t["replaygain-album-peak"], {prefix="Peak:", suffix=" dB",
+        append(c, t["replaygain-album-peak"], {prefix="峰值:", suffix=" dB",
                                                nl="", indent=o.prefix_sep})
     end
     if t["dolby-vision-profile"] or t["dolby-vision-level"] then
