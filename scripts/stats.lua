@@ -1004,9 +1004,9 @@ local function append_img_params(s, r, ro)
         append(s, r["primaries"], {prefix="in", nl="", indent=" ", prefix_sep=" ",
                                    no_prefix_markup=true})
     else
-        append(s, r["primaries"], {prefix="原色:", nl="", indent=indent})
+        append(s, r["primaries"], {prefix="色彩原色:", nl="", indent=indent})
     end
-    append(s, r["gamma"], {prefix="传递函数:", nl="", indent=indent})
+    append(s, r["gamma"], {prefix="传输特性:", nl="", indent=indent})
 end
 
 
