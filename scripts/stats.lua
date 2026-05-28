@@ -796,9 +796,9 @@ local function add_file(s, print_cache, print_tags)
     local edition = mp.get_property_number("current-edition")
     local ed_cond = (edition and editions > 1)
     if ed_cond then
-        append_property(s, "edition-list/" .. tostring(edition) .. "/title",
+        append_property(s, "user-data/edition-list/" .. tostring(edition) .. "/title",
                        {prefix="版本:"})
-        append_property(s, "edition-list/count",
+        append_property(s, "user-data/edition-list/count",
                         {prefix="(" .. tostring(edition + 1) .. "/", suffix=")", nl="",
                          indent=" ", prefix_sep=" ", no_prefix_markup=true})
     end
