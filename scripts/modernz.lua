@@ -641,7 +641,7 @@ local state = {
     persistent_seekbar_element = nil,
     seekbar_element = nil,
     persistent_progress_toggle = user_opts.persistent_progress,
-    user_subpos = mp.get_property_number("sub-pos") or 100,
+    user_subpos = mp.get_property_number("secondary-sub-pos") or 100,
     osc_adjusted_subpos = nil,
     is_image = false,
     is_url = false,
@@ -1000,7 +1000,7 @@ end
 local function reset_margins()
     -- restore subtitle position if it was changed
     if state.osc_adjusted_subpos ~= nil then
-        mp.set_property_number("sub-pos", state.user_subpos)
+        mp.set_property_number("secondary-sub-pos", state.user_subpos)
         state.osc_adjusted_subpos = nil
     end
     set_margin_offset("osd-margin-y", 0)
@@ -1026,7 +1026,7 @@ local function update_margins()
                 local adjusted = math.floor((1 - margins.b) * 100)
                 if adjusted < 0 then adjusted = state.user_subpos end
                 state.osc_adjusted_subpos = adjusted
-                mp.set_property_number("sub-pos", adjusted)
+                mp.set_property_number("secondary-sub-pos", adjusted)
             else
                 -- sub pos is high; do nothing
                 state.osc_adjusted_subpos = nil
@@ -1034,7 +1034,7 @@ local function update_margins()
         else
             -- restore original sub position
             if state.osc_adjusted_subpos ~= nil then
-                mp.set_property_number("sub-pos", state.user_subpos)
+                mp.set_property_number("secondary-sub-pos", state.user_subpos)
                 state.osc_adjusted_subpos = nil
             end
         end
@@ -4211,7 +4211,7 @@ observe_cached("chapter", request_tick)
 mp.observe_property("loop-file", "bool", function(_, val)
     state.file_loop = (val ~= false)
 end)
-mp.observe_property("sub-pos", "native", function(_, value)
+mp.observe_property("secondary-sub-pos", "native", function(_, value)
     if value == nil then return end
     if state.osc_adjusted_subpos == nil or value ~= state.osc_adjusted_subpos then
         state.user_subpos = value
@@ -4468,8 +4468,8 @@ local function validate_user_opts()
     end
 
     local watch_later = "," .. ((mp.get_property("options/watch-later-options") or ""):gsub("%s+", "")) .. ","
-    if user_opts.sub_margins and watch_later:find(",sub-pos,", 1, true) then
-        msg.warn("sub_margins conflict: add watch-later-options-remove=sub-pos to mpv.conf")
+    if user_opts.sub_margins and watch_later:find(",secondary-sub-pos,", 1, true) then
+        msg.warn("sub_margins conflict: add watch-later-options-remove=secondary-sub-pos to mpv.conf")
     end
     if user_opts.osd_margins and watch_later:find(",osd-margin-y,", 1, true) then
         msg.warn("osd_margins conflict: add watch-later-options-remove=osd-margin-y to mpv.conf")
