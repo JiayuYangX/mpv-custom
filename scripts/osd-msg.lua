@@ -55,6 +55,7 @@ local show_time_callback
 local function show_time(msg)
     return function (_, seeking)
         local t = mp.get_property_number("playback-time")
+        if not t then return end
         local hours = math.floor(t / 3600)
         local mins = math.floor((t % 3600) / 60)
         local secs = t % 60

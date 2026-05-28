@@ -4306,7 +4306,7 @@ local function visibility_mode(mode, no_osd)
     mp.set_property_native("user-data/osc/visibility", mode)
 
     if not no_osd and tonumber(mp.get_property("osd-level")) >= 1 then
-        mp.osd_message("OSC visibility: " .. mode)
+        mp.osd_message("OSC 可见性: " .. mode)
     end
 
     -- Reset the input state on a mode change. The input state will be
@@ -4335,7 +4335,7 @@ local function idlescreen_visibility(mode, no_osd)
     mp.set_property_native("user-data/osc/idlescreen", user_opts.idlescreen)
 
     if not no_osd and tonumber(mp.get_property("osd-level")) >= 1 then
-        mp.osd_message("OSC logo visibility: " .. tostring(mode))
+        mp.osd_message("OSC 图标可见性: " .. tostring(mode))
     end
 
     request_tick()
