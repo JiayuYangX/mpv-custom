@@ -50,26 +50,35 @@ local function show_filename(msg)
     mp.osd_message(string.format(msg or "%s", filename))
 end
 
-local show_time_callback
-
 local function show_time(msg)
-    return function (_, seeking)
+    local function show()
         local t = mp.get_property_number("playback-time")
-        if not t then return end
         local hours = math.floor(t / 3600)
         local mins = math.floor((t % 3600) / 60)
         local secs = t % 60
         mp.osd_message(string.format(msg or "%d:%02d:%02d", hours, mins, secs))
-        if not seeking then
-            mp.unobserve_property(show_time_callback)
+    end
+
+    show(mp.get_property_number("playback-time"))
+    if mp.get_property_bool("seeking") then
+        local function on_seeking(_, s)
+            if s then return end
+            mp.unobserve_property(on_seeking)
+            show()
         end
+        mp.observe_property("seeking", "bool", on_seeking)
+    else
+        local skip = true
+        local function on_time()
+            if skip then skip = false; return end
+            mp.unobserve_property(on_time)
+            show()
+        end
+        mp.observe_property("playback-time", "number", on_time)
     end
 end
 
 mp.register_script_message("show-edition", show_edition)
 mp.register_script_message("show-chapter", show_chapter)
 mp.register_script_message("show-filename", show_filename)
-mp.register_script_message("show-time", function (msg)
-    show_time_callback = show_time(msg)
-    mp.observe_property("seeking", "bool", show_time_callback)
-end)
+mp.register_script_message("show-time", show_time)
