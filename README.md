@@ -2,7 +2,9 @@
 
 项目为 [mpv](https://mpv.io/) 播放器的个人配置文件，采用 [ModernZ](https://github.com/Samillion/ModernZ) 作为 OSC，脚本和设置参考自 [mpv-config](https://github.com/dyphire/mpv-config)，滤镜和着色器来源于 [mpv_PlayKit（原 mpv-lazy）](https://github.com/hooke007/mpv_PlayKit)。
 
-![示意图](scheme.jpg)
+![示意图1](pic1.jpg)
+
+![示意图2](pic2.jpg)
 
 ## 使用方法
 
@@ -26,15 +28,15 @@
 - [thumbfast](https://github.com/po5/thumbfast)：进度条略缩图预览
 - [evafast](https://github.com/po5/evafast)：提供长按快进功能
 - [input-event](https://github.com/natural-harmonia-gropius/input-event)：提供更加丰富的输入行为，如长按、双击等
-- [pause-indicator](https://github.com/CogentRedTester/mpv-scripts/blob/master/pause-indicator.lua)：再界面中央显示播放/暂停图标
+- [pause-indicator](https://github.com/CogentRedTester/mpv-scripts/blob/master/pause-indicator.lua)：在界面中央显示播放/暂停图标
 - [dynamic-crop](https://github.com/Ashyni/mpv-scripts/)：动态裁剪黑边
-- [recentmenu](https://github.com/natural-harmonia-gropius/recent-menu)：提供最近访问记录及其菜单项
 - [mpv-file-browser](https://github.com/CogentRedTester/mpv-file-browser)：提供 OSC 界面文件浏览功能
 - [clipshot](https://github.com/ObserverOfTime/mpv-scripts/blob/master/clipshot.lua)：将截图复制到剪贴板
 - [osd-bar](https://github.com/422658476/MPV-EASY-Player/blob/master/portable-data/scripts/osd-bar.lua)：窗口模式在底部始终显示进度条（非 OSC）
 - [sub-fastwhisper](https://github.com/dyphire/mpv-sub-fastwhisper)：AI 识别/翻译字幕（须自行安装 [Faster-Whisper](https://github.com/SYSTRAN/faster-whisper) 并填写程序路径和大模型 API Key）
 - [sub-assrt](https://github.com/dyphire/mpv-sub-assrt)：从射手网搜索和下载字幕（由于未使用 uosc，功能可能受限）
 - [uosc_danmaku](https://github.com/Tony15246/uosc_danmaku)：加载弹弹play弹幕（由于未使用 uosc，功能可能受限）
+- [mpvMatroska](https://github.com/hubblec4/mpvMatroska)：解析 MKV 文件结构并增强播放体验；本配置仅取部分文件实现读取 MKV 版本标题的功能
 - [stats.lua](https://github.com/hooke007/mpv_PlayKit/blob/main/portable_config/scripts/stats.lua)：统计信息汉化；部分细节有所修改
 - [select.lua](https://github.com/mpv-player/mpv/blob/master/player/lua/select.lua)：原生菜单汉化；修改自 mpv 源代码内置脚本
 
