@@ -11,6 +11,7 @@ local o = {
     escape_title = true,     -- escape & to && in menu title
     max_title_length = 80,   -- limit the title length, set to 0 to disable.
     max_playlist_items = 20, -- limit the playlist items in submenu, set to 0 to disable.
+    max_history_items = 20,  -- limit the history items in submenu, set to 0 to disable.
 }
 opts.read_options(o)
 
@@ -322,17 +323,17 @@ end
 -- handle #@edition menu update
 local function update_editions_menu(menu)
     local submenu = to_submenu(menu.item)
-    local edition_list = get('edition-list', {})
+    local edition_list = get('user-data/edition-list', {})
     if #edition_list == 0 then return end
 
     local current = get('current-edition', -1)
     for id, edition in ipairs(edition_list) do
         local title = abbr_title(edition.title)
-        if title == '' then title = 'Edition ' .. id end
-        if edition.default then title = title .. ' [default]' end
+        if title == '' then title = '版本 ' .. id end
+        if edition.default then title = title .. ' [默认]' end
         submenu[#submenu + 1] = {
             title = title,
-            cmd = string.format('set edition %d', id - 1),
+            cmd = string.format('no-osd set edition %d', id - 1),
             state = id == current + 1 and { 'checked' } or {},
         }
     end
@@ -427,6 +428,93 @@ local function update_profiles_menu(menu)
     end
 end
 
+-- build history item title
+local function build_history_title(item)
+    local time = type(item.time) == "number" and os.date("%m/%d %H:%M", item.time) or ""
+    local hint = ""
+    local title = ""
+    if item.title and item.title ~= "" then
+        title = item.title
+        local scheme = item.path:match("^(%a[%w.+-]-)://")
+        hint = (scheme and scheme:upper() or "URL") .. " | " .. time
+    else
+        local _, filename = utils.split_path(item.path)
+        local name, ext = filename:match("^(.*[^%.])%.([^%.]+)$")
+        title = (name and name ~= "") and name or filename
+        hint = (ext and ext:upper() or "FILE") .. " | " .. time
+    end
+    return abbr_title(title) .. "\t" .. hint
+end
+
+-- handle #@history menu update
+local function update_history_menu(menu)
+    local submenu = to_submenu(menu.item)
+    get('filename')
+
+    local history_path = mp.command_native({"expand-path", mp.get_property("watch-history-path")})
+    local f, err = io.open(history_path)
+    if not f then
+        if mp.get_property_native("save-watch-history") then
+            msg.warn("Failed to open watch history: " .. tostring(err))
+        else
+            msg.warn("Enable --save-watch-history to jump to recently played files.")
+        end
+        return
+    end
+
+    local entries = {}
+    for line in f:lines() do
+        local entry = utils.parse_json(line)
+        if entry and entry.path then
+            entries[#entries + 1] = entry
+        else
+            mp.msg.warn(f .. ": Parse error.")
+        end
+    end
+    f:close()
+
+    if #entries == 0 then return end
+
+    local history = {}
+    local seen = {}
+    for i = #entries, 1, -1 do
+        local entry = entries[i]
+        if not seen[entry.path] then
+            seen[entry.path] = true
+            history[#history + 1] = entry
+        end
+    end
+    
+    local from, to = 1, #history
+    if o.max_history_items > 0 and #history > o.max_history_items then
+        to = o.max_history_items
+    end
+    
+    if from > 1 then
+        submenu[#submenu + 1] = {
+            title = string.format('...\t[%d]', from - 1),
+            cmd = 'ignore',
+        }
+    end
+    
+    for id = from, to do
+        local item = history[id]
+        if item then
+            submenu[#submenu + 1] = {
+                title = build_history_title(item),
+                cmd = string.format('loadfile "%s"', item.path:gsub("\\", "/"))
+            }
+        end
+    end
+
+    if to < #history then
+        submenu[#submenu + 1] = {
+            title = string.format('...\t[%d]', #history - to),
+            cmd = 'ignore',
+        }
+    end
+end
+
 -- handle menu state update
 local function update_menu_state(menu)
     if not menu.state then return end
@@ -456,6 +544,7 @@ local dyn_updaters = {
     ['audio-devices'] = update_audio_devices_menu,
     ['playlist'] = update_playlist_menu,
     ['profiles'] = update_profiles_menu,
+    ['history'] = update_history_menu,
 }
 
 -- handle dynamic menu update
@@ -678,7 +767,7 @@ local function parse_input_conf(conf)
                 else
                     local title
                     if key == 'SHARP' then key = '#' end
-                    if key == 'UNDERLINE' then
+                    if key == 'Ctrl+_' then
                         title = name .. "\t" .. '_'
                     else
                         title = (key ~= '' and key ~= '_') and (name .. "\t" .. key) or name
