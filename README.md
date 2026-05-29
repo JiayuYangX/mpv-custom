@@ -8,7 +8,7 @@
 
 ## 使用方法
 
-从 Release 中下载配置文件压缩包。安装 mpv 构建版后，将压缩包中的 portable_config 解压自播放器根目录。
+从 Release 中下载配置文件压缩包。安装 mpv 后，将压缩包中的 portable_config 解压到播放器根目录。
 
 ## OSC
 
