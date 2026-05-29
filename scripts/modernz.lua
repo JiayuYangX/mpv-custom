@@ -3343,7 +3343,8 @@ local function osc_init()
     -- zoom in/out helper
     local function zoom_step(delta)
         local z = mp.get_property_number("video-zoom", 0)
-        mp.commandv("osd-msg", "set", "video-zoom", math.max(user_opts.zoom_out_min, math.min(user_opts.zoom_in_max, z + delta)))
+        mp.commandv("no-osd", "set", "video-zoom", math.max(user_opts.zoom_out_min, math.min(user_opts.zoom_in_max, z + delta)))
+        mp.command("show-text '缩放: ${video-zoom}'")
     end
 
     -- zoom out icon
@@ -3351,7 +3352,7 @@ local function osc_init()
     ne.content = icons.zoom_out
     ne.tooltipF = locale.zoom_out
     ne.eventresponder["mbtn_left_up"] = function () zoom_step(-0.05) end
-    ne.eventresponder["mbtn_right_up"] = function () mp.commandv("osd-msg", "set", "video-zoom", 0) end
+    ne.eventresponder["mbtn_right_up"] = function () mp.commandv("no-osd", "set", "video-zoom", 0); mp.command("show-text '缩放: ${video-zoom}'") end
     ne.eventresponder["wheel_up_press"] = function () zoom_step(0.05) end
     ne.eventresponder["wheel_down_press"] = function () zoom_step(-0.05) end
 
@@ -3365,13 +3366,14 @@ local function osc_init()
     ne.eventresponder["mouse_move"] = function (element)
         local pos = get_slider_value(element)
         if element.state.lastseek == nil or element.state.lastseek ~= pos then
-                mp.commandv("osd-msg", "set", "video-zoom", pos)
+                mp.commandv("no-osd", "set", "video-zoom", pos)
+                mp.command("show-text '缩放: ${video-zoom}'")
                 element.state.lastseek = pos
         end
     end
-    ne.eventresponder["mbtn_left_down"] = function (element) mp.commandv("osd-msg", "set", "video-zoom", get_slider_value(element)) end
+    ne.eventresponder["mbtn_left_down"] = function (element) mp.commandv("no-osd", "set", "video-zoom", get_slider_value(element)); mp.command("show-text '缩放: ${video-zoom}'") end
     ne.eventresponder["reset"] = function (element) element.state.lastseek = nil end
-    ne.eventresponder["mbtn_right_up"] = function () mp.commandv("osd-msg", "set", "video-zoom", 0) end
+    ne.eventresponder["mbtn_right_up"] = function () mp.commandv("no-osd", "set", "video-zoom", 0); mp.command("show-text '缩放: ${video-zoom}'") end
     ne.eventresponder["wheel_up_press"] = function () zoom_step(0.05) end
     ne.eventresponder["wheel_down_press"]= function () zoom_step(-0.05) end
 
@@ -3380,7 +3382,7 @@ local function osc_init()
     ne.content = icons.zoom_in
     ne.tooltipF = locale.zoom_in
     ne.eventresponder["mbtn_left_up"] = function () zoom_step(0.05) end
-    ne.eventresponder["mbtn_right_up"] = function () mp.commandv("osd-msg", "set", "video-zoom", 0) end
+    ne.eventresponder["mbtn_right_up"] = function () mp.commandv("no-osd", "set", "video-zoom", 0); mp.command("show-text '缩放: ${video-zoom}'") end
     ne.eventresponder["wheel_up_press"] = function () zoom_step(0.05) end
     ne.eventresponder["wheel_down_press"]= function () zoom_step(-0.05) end
 

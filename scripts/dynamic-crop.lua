@@ -315,7 +315,7 @@ end
 
 local function switch_hwdec(id, hwdec, error)
     if hwdec ~= "no" and not string.match(hwdec, "-copy") then
-        local msg = "Switch to SW decoding or HW -copy variant."
+        local msg = "切换至软件解码或硬件解码的 -copy 模式"
         mp.msg.info(msg)
         mp.osd_message(string.format("%s: %s", label_prefix, msg), 5)
     end
@@ -702,7 +702,7 @@ end
 local ENABLE, DISABLE_WITH_CROP, DISABLE = 1, 2, 3
 function on_toggle(auto)
     if s.f_missing then
-        mp.osd_message("Libavfilter cropdetect missing", 3)
+        mp.osd_message("Libavfilter 裁剪检测滤镜缺失", 3)
         return
     end
     local EVENT = "toggle"

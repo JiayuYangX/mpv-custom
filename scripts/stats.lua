@@ -753,7 +753,7 @@ end
 
 
 local function add_file(s, print_cache, print_tags)
-    append(s, "", {prefix="当前文件:", nl="", indent=""})
+    append(s, "", {prefix="文件:", nl="", indent=""})
     append_property(s, "filename", {prefix_sep="", nl="", indent=""})
     if mp.get_property_osd("filename") ~= mp.get_property_osd("media-title") then
         append_property(s, "media-title", {prefix="媒体标题/文件名:"})
@@ -1040,7 +1040,7 @@ local function add_video_out(s)
         return
     end
 
-    append(s, "", {prefix="显示设备:", nl=o.nl .. o.nl, indent=""})
+    append(s, "", {prefix="显示:", nl=o.nl .. o.nl, indent=""})
     append(s, vo, {prefix_sep="", nl="", indent=""})
 
     append_property(s, "display-names", {prefix_sep="", prefix="(", suffix=")",

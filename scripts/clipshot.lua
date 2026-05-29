@@ -49,11 +49,11 @@ end
 local function clipshot(arg)
     return function()
         mp.commandv('screenshot-to-file', file, arg)
-        mp.command_native_async({'run', unpack(cmd)}, function(suc, _, err)
+        mp.command_native_async({'run', table.unpack(cmd)}, function(suc, _, err)
             if arg == 'subtitles' then
                 mp.osd_message(suc and '已复制截图到剪贴板 (带字幕)' or err, 1)
             elseif arg == 'video' then
-                mp.osd_message(suc and '已复制截图到剪贴板 (不带字幕)' or err, 1)
+                mp.osd_message(suc and '已复制截图到剪贴板 (仅视频)' or err, 1)
             elseif arg == 'window' then
                 mp.osd_message(suc and '已复制截图到剪贴板 (窗口)' or err, 1)
             end

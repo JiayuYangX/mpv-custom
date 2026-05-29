@@ -59,9 +59,8 @@ local function show_time(msg)
         local secs = t % 60
         mp.osd_message(string.format(msg or "%d:%02d:%02d", hours, mins, secs))
     end
-
-    show(mp.get_property_number("playback-time"))
     if mp.get_property_bool("seeking") then
+        show()
         local function on_seeking(_, s)
             if s then return end
             mp.unobserve_property(on_seeking)
