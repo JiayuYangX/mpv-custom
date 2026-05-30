@@ -406,7 +406,7 @@ local function sorted_keys(t, comp_fn)
 end
 
 local function scroll_hint(search)
-    local hint = format("(提示：该页面可使用按键 %s/%s", o.key_scroll_up, o.key_scroll_down)
+    local hint = format("(提示: 该页面可使用按键 %s/%s", o.key_scroll_up, o.key_scroll_down)
     if search then
         hint = hint .. " 进行滚动浏览且可使用按键 " .. o.key_search
     end
@@ -1046,7 +1046,7 @@ local function add_video_out(s)
     append_property(s, "display-names", {prefix_sep="", prefix="(", suffix=")",
                     no_prefix_markup=true, nl="", indent=" "}, nil, true)
     append(s, mp.get_property_native("current-gpu-context"),
-           {prefix="GPU context:", nl="", indent=o.prefix_sep .. o.prefix_sep})
+           {prefix="GPU上下文:", nl="", indent=o.prefix_sep .. o.prefix_sep})
     append_property(s, "avsync", {prefix="A/V同步偏移:"})
     append_fps(s, "display-fps", "estimated-display-fps")
     if append_property(s, "decoder-frame-drop-count",
@@ -1186,7 +1186,7 @@ local function add_audio(s)
                    no_prefix_markup=true, suffix="]"})
         end
     end
-    append_property(s, "current-ao", {prefix="当前音频输出:", nl="",
+    append_property(s, "current-ao", {prefix="音频输出:", nl="",
                                       indent=o.prefix_sep .. o.prefix_sep})
     local dev = append_property(s, "audio-device", {prefix="设备:"})
     local ao_mute = mp.get_property_native("ao-mute") and " (Muted)" or ""
@@ -1196,7 +1196,7 @@ local function add_audio(s)
     if math.abs(mp.get_property_native("audio-delay")) > 1e-6 then
         append_property(s, "audio-delay", {prefix="音频延迟:"})
     end
-    local cc = append(s, merge(r, ro, "channel-count"), {prefix="声道:"})
+    local cc = append(s, merge(r, ro, "channel-count"), {prefix="声道数:"})
     append(s, merge(r, ro, "format"), {prefix="编码格式:", nl=cc and "" or o.nl,
                             indent=cc and o.prefix_sep .. o.prefix_sep})
     append(s, merge(r, ro, "samplerate"), {prefix="采样率:", suffix=" Hz"})
