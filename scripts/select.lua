@@ -23,7 +23,7 @@ local options = {
     hide_history_duplicates = true,
     menu_conf_path = "~~/menu.conf",
     max_playlist_items = 25,
-    populate_menu_data = false,
+    populate_menu_data = true,
 }
 
 require "mp.options".read_options(options, nil, function () end)
